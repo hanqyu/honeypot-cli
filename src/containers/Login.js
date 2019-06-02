@@ -4,6 +4,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Toast, { DURATION } from 'react-native-easy-toast'
 import { Header } from 'react-navigation';
 import styles from "../containers/styles/Login";
+import { connect } from 'react-redux';
+import { setToken, setUserId, setUserName, setLoading } from '../store/actions/index'
 
 const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'https://honeypot.hanqyu.com/'
 
@@ -14,11 +16,10 @@ const DismissKeyboard = ({ children }) => (
 );
 const reEmail = /\S+@\S+\.\S+/;
 
-export default class Login extends React.Component {
+class Login extends React.Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {}
+    state = {
+        isLoading: this.props.isLoading
     }
 
     handleSubmit() {
@@ -52,9 +53,7 @@ export default class Login extends React.Component {
     }
 
     async postValidatedData() {
-        this.setState({
-            isLoading: true
-        })
+        this.setState({isLoading: true});
 
         const response = await fetch(apiBaseUrl + 'api/v1/auth/login/', {
             method: 'POST',
@@ -76,12 +75,10 @@ export default class Login extends React.Component {
                 this.refs.toast.show('알 수 없는 오류가 발생하였습니다.', 2000)
                 return null
             }
-            this.setState({
-                isLoading: false,
-                user: responseJson.user,
-                accessToken: responseJson.token.access,
-                refreshToken: responseJson.token.refresh
-            })
+            this.setState({isLoading: false});
+            this.props.onSetToken(responseJson.token.access)
+            this.props.onSetUserId(responseJson.user.id)
+            this.props.onSetUserName(responseJson.user.username)
             this.props.navigation.navigate('Home');
         } else {
             this.refs.toast.show(responseJson.error, 2000);
@@ -179,7 +176,7 @@ export default class Login extends React.Component {
                                 <TouchableOpacity
                                     onPress={() => this.handleSubmit()}
                                     style={styles.loginButtonContainer}>
-
+                                    {this.state.isLoading && <ActivityIndicator size="small" color="#FFFFFF" />}
                                     {/* loginButtonText */}
                                     <Text style={styles.loginButtonText}>로그인</Text>
                                 </TouchableOpacity>
@@ -206,3 +203,24 @@ export default class Login extends React.Component {
         );
     };
 };
+
+
+const mapStateToProps = state => {
+    return {
+        isLoading: false,
+        accessToken: state.accessToken,
+        userId: state.userId,
+        userName: state.userName,
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSetLoading: (bool) => dispatch(setLoading(bool)),
+        onSetToken: (accessToken) => dispatch(setToken(accessToken)),
+        onSetUserId: (userId) => dispatch(setUserId(userId)),
+        onSetUserName: (userName) => dispatch(setUserName(userName)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

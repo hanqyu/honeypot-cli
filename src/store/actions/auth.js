@@ -1,4 +1,4 @@
-import { SAVE_TOKEN, REMOVE_TOKEN, LOADING, ERROR } from './actionTypes';
+import { SAVE_TOKEN, REMOVE_TOKEN, LOADING, ERROR, SET_USER_ID, SET_USER_NAME } from './actionTypes';
 
 export const setToken = accessToken => {
     return {
@@ -13,9 +13,10 @@ export const removeToken = () => {
     };
 }
 
-export const loading = () => {
+export const setLoading = (isLoading) => {
     return {
         type: LOADING,
+        isLoading
     };
 }
 

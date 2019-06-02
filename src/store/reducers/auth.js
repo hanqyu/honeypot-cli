@@ -15,7 +15,7 @@ const reducer = (state = initialState, action) => {
         case REMOVE_TOKEN:
             return { ...state, token: null };
         case LOADING:
-            return { ...state, loading: action.isLoading };
+            return { ...state, isLoading: action.isLoading };
         case ERROR:
             return { ...state, error: action.error };
         case SET_USER_ID:
