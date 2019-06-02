@@ -5,6 +5,8 @@ import Toast, { DURATION } from 'react-native-easy-toast'
 import AsyncStorage from '@react-native-community/async-storage';
 import CardItem from "../components/CardItem";
 import styles from "../containers/styles/Home";
+import { connect } from 'react-redux';
+import { setToken, setUserId, setUserName, setLoading } from '../store/actions/index'
 
 const filterButtons = [
 	{ id: 0, text: '최신순', urlParam: 'recent' },
@@ -14,23 +16,18 @@ const filterButtons = [
 
 const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'https://honeypot.hanqyu.com/'
 
-export default class Home extends React.Component {
+class Home extends React.Component {
 
 	constructor(props) {
+		console.log(props);
 		super(props);
 		this.state = {
 			isLoading: true,
 			selectedId: 1,
-			selectedUrlParam: 'recent'
-		};
-		this.state.bearer_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTYxMjg3NDQ4LCJqdGkiOiI5ZTdiMmI3NTRiMjg0OWZlYmVjMzM0MTc0Mjc2ZmYyYyIsInVzZXJfaWQiOjJ9.0wmunQASomn39C7-ZLmW80a2JxdRzmXvy5z5OxHUevU';
-		this.handleFilterChange = this.handleFilterChange.bind(this);
-		this.clickFilter = this.clickFilter.bind(this);
-		this.fetchQuestion = this.fetchQuestion.bind(this);
-		this.boost = this.boost.bind(this);
+			selectedUrlParam: 'recent',
+			dataSource: ''
+		}
 	}
-
-	
 
 	handleFilterChange = (id) => {
 		this.setState({ selectedId: id });
@@ -45,24 +42,25 @@ export default class Home extends React.Component {
 
 	async fetchQuestion(urlParam) {
 		this.setState({
-			isLoading: true
+			isLoading: true,
 		})
-
-		const response = await fetch('http://127.0.0.1:8000/api/v1/question/' + urlParam + '/', {
+		console.log(this.props)
+		const response = await fetch(apiBaseUrl + 'api/v1/question/' + urlParam + '/', {
 			method: 'POST',
 			headers: {
-				'Authorization': 'Bearer ' + this.state.bearer_token,
+				'Authorization': 'Bearer ' + this.props.accessToken,
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
 				count: 30
 			}),
 		});
+		
 		const responseJson = await response.json();
+		console.log(responseJson)
 		this.setState({
 			isLoading: false,
 			dataSource: responseJson.result,
-		}, function () {
 		});
 	}
 
@@ -78,11 +76,11 @@ export default class Home extends React.Component {
 	}
 
 	async postBoost(questionId) {
-		await fetch('http://127.0.0.1:8000/api/v1/question/' + questionId + '/vote/',
+		await fetch(apiBaseUrl + 'api/v1/question/' + questionId + '/vote/',
 			{
 				method: 'POST',
 				headers: {
-					'Authorization': 'Bearer ' + this.state.bearer_token,
+					'Authorization': 'Bearer ' + this.props.accessToken,
 					'Content-Type': 'application/json',
 				},
 			}).then(response => {
@@ -105,11 +103,11 @@ export default class Home extends React.Component {
 		if (this.state.isLoading) {
 			return (
 				<View style={{ flex: 1, alignSelf: 'center' }}>
-					<ActivityIndicator />
+					<ActivityIndicator size="small" />
 				</View>
 			)
 		}
-		
+
 		return (
 			<View style={styles.container}>
 				<Toast
@@ -171,11 +169,6 @@ export default class Home extends React.Component {
 								boost={() => this.boost(item.id)}
 								navigation={this.props.navigation}
 							/>
-							{(this.state.isLoading) && (
-								<View style={styles.loading}>
-									<ActivityIndicator size='large' />
-								</View>
-							)}
 						</Card>
 					))}
 				</CardStack>
@@ -191,3 +184,25 @@ export default class Home extends React.Component {
 };
 
 
+
+
+
+const mapStateToProps = state => {
+	return {
+		isLoading: state.auth.isLoading,
+		accessToken: state.auth.accessToken,
+		userId: state.auth.userId,
+		userName: state.auth.userName,
+	};
+};
+
+const mapDispatchToProps = dispatch => {
+	return {
+		onSetLoading: (bool) => dispatch(setLoading(bool)),
+		onSetToken: (accessToken) => dispatch(setToken(accessToken)),
+		onSetUserId: (userId) => dispatch(setUserId(userId)),
+		onSetUserName: (userName) => dispatch(setUserName(userName)),
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

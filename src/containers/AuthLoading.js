@@ -41,6 +41,7 @@ class AuthLoading extends React.Component {
         if (response.ok) {
             this.props.onSetToken(accessToken);
             AsyncStorage.setItem('accessToken', accessToken);
+            console.log(this.props)
             this.props.navigation.navigate('Home');
         } else {
             this.refreshToken();
@@ -92,13 +93,13 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        accessToken: state.accessToken,
+        accessToken: state.auth.accessToken,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onSetToken: (accessToken) => dispatch(setToken(accessToken)),
+        onSetToken: (accessToken) => dispatch(setToken(accessToken))
     };
 };
 
