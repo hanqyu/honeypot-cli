@@ -126,8 +126,8 @@ class Login extends React.Component {
 
                                     {/* fieldInputText */}
                                     <TextInput
-                                        placeholder='Email'
                                         style={styles.fieldInputText}
+                                        placeholder='Email'
                                         autoCapitalize='none'
                                         autoCorrect={false}
                                         autoFocus={true}
@@ -154,8 +154,8 @@ class Login extends React.Component {
 
                                     {/* fieldInputText */}
                                     <TextInput
-                                        placeholder='Password'
                                         style={styles.fieldInputText}
+                                        placeholder='Password'
                                         autoCapitalize='none'
                                         autoCorrect={false}
                                         autoCompleteType='password'
