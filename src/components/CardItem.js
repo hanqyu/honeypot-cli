@@ -52,10 +52,10 @@ export default class CardItem extends React.Component {
 	}
 
 	render() {
-		// this.state.navigation.setParams({questionId: this.state.questionId});
 		const { navigate } = this.props.navigation;
 
 		return (
+
 			<View style={styles.shadow}>
 				<LinearGradient colors={['#ff8500', '#ffec00']} style={styles.container}>
 					<View style={styles.contentsContainer}>

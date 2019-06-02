@@ -19,7 +19,6 @@ class AuthLoading extends React.Component {
     };
 
     _bootstrapAsync = async () => {
-        // this.props.navigation.navigate('Login');
         const accessToken = await AsyncStorage.getItem('accessToken');
         if (accessToken) {
             this.verifyToken(accessToken);
