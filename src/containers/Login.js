@@ -21,6 +21,13 @@ export default class Login extends React.Component {
         this.state = {}
     }
 
+    handleSubmit() {
+        if (this.inputValidate()) {
+            this.postValidatedData()
+        }
+    }
+
+
     inputValidate() {
         const email = this.state.email;
         const password = this.state.password;
@@ -44,14 +51,6 @@ export default class Login extends React.Component {
 
     }
 
-    handleSubmit() {
-        if (this.inputValidate()) {
-            if (this.postValidatedData() === true) {
-                this.props.navigation.navigate('Home')
-            }
-        }
-    }
-
     async postValidatedData() {
         this.setState({
             isLoading: true
@@ -67,7 +66,8 @@ export default class Login extends React.Component {
                 password: this.state.password
             }),
         });
-        const responseJson = await response.json()
+        const responseJson = await response.json();
+
         if (response.ok) {
             try {
                 await AsyncStorage.setItem('accessToken', responseJson.token.access)
@@ -76,16 +76,15 @@ export default class Login extends React.Component {
                 this.refs.toast.show('알 수 없는 오류가 발생하였습니다.', 2000)
                 return null
             }
-
             this.setState({
                 isLoading: false,
                 user: responseJson.user,
                 accessToken: responseJson.token.access,
                 refreshToken: responseJson.token.refresh
             })
+            this.props.navigation.navigate('Home');
         } else {
-            this.refs.toast.show(responseJson.error, 2000)
-            return null
+            this.refs.toast.show(responseJson.error, 2000);
         }
     }
 

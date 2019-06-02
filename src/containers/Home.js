@@ -12,6 +12,8 @@ const filterButtons = [
 	{ id: 2, text: '관심사순', urlParam: 'bycategory' }
 ]
 
+const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'https://honeypot.hanqyu.com/'
+
 export default class Home extends React.Component {
 
 	constructor(props) {
@@ -27,6 +29,8 @@ export default class Home extends React.Component {
 		this.fetchQuestion = this.fetchQuestion.bind(this);
 		this.boost = this.boost.bind(this);
 	}
+
+	
 
 	handleFilterChange = (id) => {
 		this.setState({ selectedId: id });

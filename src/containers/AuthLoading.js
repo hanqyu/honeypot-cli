@@ -6,20 +6,70 @@ import {
     View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { getToken } from '../store/actions/index'
+import { setToken } from '../store/actions/index'
 import AsyncStorage from '@react-native-community/async-storage';
 
 
+const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'https://honeypot.hanqyu.com/'
+
 class AuthLoading extends React.Component {
 
-    async componentDidMount() {
+    componentDidMount() {
         this._bootstrapAsync();
     };
 
     _bootstrapAsync = async () => {
+        // this.props.navigation.navigate('Login');
         const accessToken = await AsyncStorage.getItem('accessToken');
-        this.props.navigation.navigate(accessToken ? 'Home' : 'Login');
-    };
+        if (accessToken) {
+            this.verifyToken(accessToken);
+        } else {
+            this.props.navigation.navigate('Login');
+        }
+    }
+
+    verifyToken = async (accessToken) => {
+        const response = await fetch(apiBaseUrl + 'api/v1/auth/token/verify/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                token: accessToken
+            })
+        })
+        if (response.ok) {
+            this.props.onSetToken(accessToken);
+            AsyncStorage.setItem('accessToken', accessToken);
+            this.props.navigation.navigate('Home');
+        } else {
+            this.refreshToken();
+        }
+
+    }
+
+    refreshToken = async () => {
+        const refreshToken = await AsyncStorage.getItem('refreshToken')
+        const response = await fetch(apiBaseUrl + 'api/v1/auth/token/refresh/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                refresh: refreshToken,
+            }),
+        })
+
+        if (response.ok) {
+            const responseJson = await response.json();
+            this.props.onSetToken(responseJson.access);
+            await AsyncStorage.setItem('accessToken', responseJson.access);
+            this._bootstrapAsync();
+        } else {
+            console.log('FAIL: Token Refresh');
+            this.props.navigation.navigate('Login');
+        }
+    }
 
     render() {
         return (
@@ -42,13 +92,13 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => {
     return {
-        token: state.token,
+        accessToken: state.accessToken,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        getToken: () => dispatch(getToken()),
+        onSetToken: (accessToken) => dispatch(setToken(accessToken)),
     };
 };
 

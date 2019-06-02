@@ -1,15 +1,9 @@
-import { GET_TOKEN, SAVE_TOKEN, REMOVE_TOKEN, LOADING, ERROR } from './actionTypes';
+import { SAVE_TOKEN, REMOVE_TOKEN, LOADING, ERROR } from './actionTypes';
 
-export const getToken = () => {
-    return {
-        type: GET_TOKEN,
-    };
-}
-
-export const setToken = token => {
+export const setToken = accessToken => {
     return {
         type: SAVE_TOKEN,
-        token
+        accessToken
     };
 }
 
@@ -30,4 +24,18 @@ export const error = error => {
         type: ERROR,
         error
     };
+}
+
+export const setUserId = userId => {
+    return {
+        type: SET_USER_ID,
+        userId
+    }
+}
+
+export const setUserName = userName => {
+    return {
+        type: SET_USER_NAME,
+        userName
+    }
 }
