@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { setToken, setUserId, setUserName, setLoading } from '../store/actions/index'
 
 const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'https://honeypot.hanqyu.com/'
+const NEXT_VIEW = 'Home';
 
 const DismissKeyboard = ({ children }) => (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -15,6 +16,7 @@ const DismissKeyboard = ({ children }) => (
     </TouchableWithoutFeedback >
 );
 const reEmail = /\S+@\S+\.\S+/;
+
 
 class Login extends React.Component {
 
@@ -24,7 +26,7 @@ class Login extends React.Component {
 
     handleSubmit() {
         if (this.inputValidate()) {
-            this.postValidatedData()
+            this.postValidatedData();
         }
     }
 
@@ -79,7 +81,7 @@ class Login extends React.Component {
             this.props.onSetToken(responseJson.token.access)
             this.props.onSetUserId(responseJson.user.id)
             this.props.onSetUserName(responseJson.user.username)
-            this.props.navigation.navigate('Home');
+            this.props.navigation.navigate(NEXT_VIEW);
         } else {
             this.refs.toast.show(responseJson.error, 2000);
         }
@@ -194,7 +196,7 @@ class Login extends React.Component {
 
                         {/* footerTextButton */}
                         <TouchableOpacity
-                            onPress={() => navigate('Register')}>
+                            onPress={() => navigate('RegisterRequired')}>
                             <Text style={styles.footerTextButton}>회원가입</Text>
                         </TouchableOpacity>
                     </KeyboardAvoidingView>

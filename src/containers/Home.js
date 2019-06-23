@@ -14,7 +14,7 @@ const filterButtons = [
 	{ id: 2, text: '관심사순', urlParam: 'bycategory' }
 ]
 
-const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'https://honeypot.hanqyu.com/'
+const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'http://honeypot.hanqyu.com/'
 
 class Home extends React.Component {
 
@@ -25,7 +25,7 @@ class Home extends React.Component {
 			isLoading: true,
 			selectedId: 1,
 			selectedUrlParam: 'recent',
-			dataSource: ''
+			dataSource: {}
 		}
 	}
 
@@ -48,7 +48,8 @@ class Home extends React.Component {
 		const response = await fetch(apiBaseUrl + 'api/v1/question/' + urlParam + '/', {
 			method: 'POST',
 			headers: {
-				'Authorization': 'Bearer ' + this.props.accessToken,
+				// 'Authorization': 'Bearer ' + this.props.accessToken,
+				'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTYyMDc4NjIyLCJqdGkiOiI0ZmJhOWQxMTI0ZTk0Mzc3OGQyMmI4YzlkMGZlZTBjMyIsInVzZXJfaWQiOjJ9.xbsb5ejv351U3angZqFhXIKqBKvOScXsWXwVBfq4pdY',
 				'Content-Type': 'application/json',
 			},
 			body: JSON.stringify({
@@ -80,7 +81,8 @@ class Home extends React.Component {
 			{
 				method: 'POST',
 				headers: {
-					'Authorization': 'Bearer ' + this.props.accessToken,
+					// 'Authorization': 'Bearer ' + this.props.accessToken,
+					'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTYyMDc4NjIyLCJqdGkiOiI0ZmJhOWQxMTI0ZTk0Mzc3OGQyMmI4YzlkMGZlZTBjMyIsInVzZXJfaWQiOjJ9.xbsb5ejv351U3angZqFhXIKqBKvOScXsWXwVBfq4pdY',
 					'Content-Type': 'application/json',
 				},
 			}).then(response => {
