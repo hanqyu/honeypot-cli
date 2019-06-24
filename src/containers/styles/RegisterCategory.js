@@ -107,6 +107,7 @@ export default StyleSheet.create({
         flexWrap: "wrap",
     },
     categoryBox: {
+        display: 'flex',
         backgroundColor: "#f5a62366",
 		borderRadius: 15,
 		paddingRight: 14,
@@ -117,9 +118,18 @@ export default StyleSheet.create({
         marginBottom: 20,
 	},
 	categoryBoxSelected: {
-
+        display: 'flex',
+        backgroundColor: PRIMARY_COLOR,
+		borderRadius: 15,
+		paddingRight: 14,
+		paddingLeft: 14,
+		paddingTop: 9,
+		paddingBottom: 9,
+        marginRight: 10,
+        marginBottom: 20,
 	},
 	categoryText: {
+        display: 'flex',
 		fontFamily: CARD_FONT,
 		fontWeight: '900',
 		color: WHITE,
@@ -128,7 +138,7 @@ export default StyleSheet.create({
     },
     buttonContainer: {
         width: DIMENSION_WIDTH,
-		backgroundColor: "#B9B9B9",
+		backgroundColor: PRIMARY_COLOR,
 		flexDirection: 'row',
         justifyContent: 'center',
         position: 'absolute',
