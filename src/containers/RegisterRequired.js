@@ -26,8 +26,13 @@ const NEXT_VIEW = 'RegisterPersonal';
 class RegisterRequired extends React.Component {
 
     state = {
-        inputData: this.props.inputData,
-        inputValid: this.props.inputValid,
+        inputData: {
+            email: "",
+            username: "",
+            password: "",
+            passwordCheck: ""
+        },
+        inputValid: {},
         isLoading: this.props.isLoading
     }
 
@@ -298,13 +303,6 @@ const mapStateToProps = state => {
         accessToken: state.accessToken,
         userId: state.userId,
         userName: state.userName,
-        inputData: {
-            email: "",
-            username: "",
-            password: "",
-            passwordCheck: ""
-        },
-        inputValid: {},
     };
 };
 
