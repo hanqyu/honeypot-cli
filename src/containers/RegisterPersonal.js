@@ -15,27 +15,50 @@ const DismissKeyboard = ({ children }) => (
 
 
 class RegisterPersonal extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            chosenDate: new Date(),
-            modalVisible: false
-        };
-        this.setDate = this.setDate.bind(this);
+
+    state = {
+        modalVisible: false,
+        inputData: {
+            gender: { male: 0, female: 0 },
+            birthDate: new Date()
+        },
+        isLoading: false
     }
 
-    setDate(newDate) {
-        this.setState({ chosenDate: newDate });
+    setDate(selectedDate) {
+        this.setState({
+            inputData: {
+                ...this.state.inputData,
+                birthDate: selectedDate
+            }
+        })
     }
 
     setModalVisible(visible) {
         this.setState({ modalVisible: visible });
     };
-    
+
     handleForm() {
         this.props.navigation.navigate('RegisterCategory');
     }
 
+    handlerGenderButton(selected) {
+        if (selected === 'male') {
+            this.setState({
+                inputData: {
+                    ...this.state.inputData,
+                    gender: { male: 1, female: 0 }
+                }
+            })
+        } else if (selected === 'female') {
+            this.setState({
+                inputData: {
+                    ...this.state.inputData,
+                    gender: { male: 0, female: 1 }
+                }
+            })
+        }
+    }
 
     render() {
         return (
@@ -73,8 +96,8 @@ class RegisterPersonal extends React.Component {
                                     </TouchableOpacity>
                                 </View>
                                 <DatePickerIOS
-                                    date={this.state.chosenDate}
-                                    onDateChange={this.setDate}
+                                    date={this.state.inputData.birthDate}
+                                    onDateChange={(date) => this.setDate(date)}
                                     locale='ko'
                                     mode='date'
                                 />
@@ -89,14 +112,28 @@ class RegisterPersonal extends React.Component {
                         {/* gender */}
                         <View>
                             <Text style={styles.fieldLabel}>성별</Text>
-                            <View style={styles.genderConatiner}>
+                            <View style={styles.genderButtonsConatiner}>
                                 {/* 선택된 버튼 표시 필요함 */}
-                                <TouchableOpacity style={styles.genderTextButton}>
-                                    <Text style={styles.genderText}>남성</Text>
+                                <TouchableOpacity
+                                    onPress={() => this.handlerGenderButton('male')}
+                                    style={
+                                        this.state.inputData.gender.male ? styles.genderButtonSelected : styles.genderButton
+                                    }
+                                >
+                                    <Text style={
+                                        this.state.inputData.gender.male ? styles.genderButtonTextSelected : styles.genderButtonText
+                                    }>남성</Text>
                                 </TouchableOpacity>
-                                <View style={styles.buttonDivider} />
-                                <TouchableOpacity style={styles.genderTextButton}>
-                                    <Text style={styles.genderText}>여성</Text>
+                                <View style={styles.genderButtonDivider} />
+                                <TouchableOpacity
+                                    onPress={() => this.handlerGenderButton('female')}
+                                    style={
+                                        this.state.inputData.gender.female ? styles.genderButtonSelected : styles.genderButton
+                                    }
+                                >
+                                    <Text style={
+                                        this.state.inputData.gender.female ? styles.genderButtonTextSelected : styles.genderButtonText
+                                    }>여성</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -110,7 +147,7 @@ class RegisterPersonal extends React.Component {
                                 }}
                             >
                                 <Text style={styles.birthDateText}>
-                                    {this.state.chosenDate.toLocaleDateString('ko')}
+                                    {this.state.inputData.birthDate.toLocaleDateString('ko')}
                                 </Text>
                             </TouchableOpacity>
                             <View style={styles.fieldDivider} />
@@ -133,7 +170,6 @@ class RegisterPersonal extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        inputData: state.register.inputData,
     };
 };
 

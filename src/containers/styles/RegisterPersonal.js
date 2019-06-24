@@ -101,30 +101,44 @@ export default StyleSheet.create({
         letterSpacing: 0.3,
         color: 'red',
     },
-    genderConatiner: {
+    genderButtonsConatiner: {
         flexDirection: 'row',
         justifyContent: 'space-around',
         marginBottom: 51
     },
-    genderTextButton: {
+    genderButton: {
         display: 'flex',
         width: CONTAINER_WIDTH / 2 - 0.5,
         textAlign: 'center',
         alignItems: 'center'
     },
-    buttonDivider: {
+    genderButtonSelected: {
+        display: 'flex',
+        width: CONTAINER_WIDTH / 2 - 0.5,
+        textAlign: 'center',
+        alignItems: 'center',
+        backgroundColor: PRIMARY_COLOR,
+    },
+    genderButtonDivider: {
         display: 'flex',
         alignSelf: 'center',
         width: 0.5,
         height: 18,
         backgroundColor: '#D9D9D9',
     },
-    genderText: {
+    genderButtonText: {
         fontFamily: CARD_FONT,
         fontSize: 15,
         fontWeight: '300',
         letterSpacing: 0.3,
         color: BLACK,
+    },
+    genderButtonTextSelected: {
+        fontFamily: CARD_FONT,
+        fontSize: 15,
+        fontWeight: '300',
+        letterSpacing: 0.3,
+        color: WHITE
     },
     birthDateText: {
         fontFamily: CARD_FONT,
