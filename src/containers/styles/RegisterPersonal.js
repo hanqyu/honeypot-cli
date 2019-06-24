@@ -23,6 +23,15 @@ export default StyleSheet.create({
         width: DIMENSION_WIDTH,
         height: DIMENSION_HEIGHT,
     },
+    toastError: {
+        backgroundColor: 'red',
+        borderRadius: 10,
+    },
+    toastErrorText: {
+        fontFamily: CARD_FONT_BARUN,
+        fontSize: 12,
+        color: WHITE
+    },
     upperBar: {
 		marginLeft: 15,
         marginRight: 15,
@@ -178,7 +187,7 @@ export default StyleSheet.create({
     },
     buttonContainer: {
         width: DIMENSION_WIDTH,
-		backgroundColor: "#B9B9B9",
+		backgroundColor: "#F5A623",
 		flexDirection: 'row',
         justifyContent: 'center',
         position: 'absolute',

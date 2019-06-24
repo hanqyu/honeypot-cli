@@ -1,10 +1,13 @@
 import React from "react";
 import styles from "./styles/RegisterPersonal";
-
+import Toast, { DURATION } from 'react-native-easy-toast'
 import { Text, View, Modal, Image, Dimensions, TouchableOpacity, TouchableWithoutFeedback, TextInput, Keyboard, DatePickerIOS } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { connect } from 'react-redux';
 import { setInputData } from '../store/actions/index'
+
+const NEXT_VIEW = 'RegisterCategory';
+const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'https://honeypot.hanqyu.com/'
 
 
 const DismissKeyboard = ({ children }) => (
@@ -12,7 +15,6 @@ const DismissKeyboard = ({ children }) => (
         {children}
     </TouchableWithoutFeedback >
 );
-
 
 class RegisterPersonal extends React.Component {
 
@@ -38,8 +40,59 @@ class RegisterPersonal extends React.Component {
         this.setState({ modalVisible: visible });
     };
 
+    async postForm() {
+        this.setState({ isLoading: true });
+
+        const body = this.parsingBody();
+        
+        if (body === false) {
+            this.props.navigation.navigate(NEXT_VIEW);
+            return false;
+        }
+        
+        console.log(this.props.userId);
+        const response = await fetch(apiBaseUrl + 'api/v1/auth/user/' + this.props.userId + '/', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            timeout: 3000,
+            body: JSON.stringify({
+                ...body
+            }),
+        });
+        const responseJson = await response.json();
+        if (response.ok) {
+            this.setState({ isLoading: false });
+            this.props.navigation.navigate(NEXT_VIEW);
+        } else {
+            this.refs.toast.show(responseJson.error, 2000);
+        }
+    }
+
+    parsingBody() {
+        let body = {};
+        if (this.state.inputData.gender.male) {
+            body.gender = 'M'
+        } else if (this.state.inputData.gender.female) {
+            body.gender = 'F'
+        }
+        
+        const fourteenYear = 1000*60*60*24*365*14;
+        const today = new Date();
+        if (today.getTime() - this.state.inputData.birthDate.getTime() >= fourteenYear) {
+            body.birthDate = birthDate
+        }
+
+        if (Object.entries(body).length === 0) {
+            return false;
+        }
+
+        return body
+    }
+
     handleForm() {
-        this.props.navigation.navigate('RegisterCategory');
+        this.postForm();
     }
 
     handlerGenderButton(selected) {
@@ -60,10 +113,24 @@ class RegisterPersonal extends React.Component {
         }
     }
 
+    objectIsNotEmpty(obj) {
+        return Object.values(obj).reduce((acc, val) => acc + val)
+    }
+
     render() {
         return (
             <DismissKeyboard>
                 <View style={styles.container}>
+                    {/* toast */}
+                    <Toast
+                        style={styles.toastError}
+                        position='top'
+                        positionValue={60}
+                        fadeInDuration={500}
+                        fadeOutDuration={500}
+                        opacity={0.7}
+                        textStyle={styles.toastErrorText}
+                        ref='toast' />
                     {/* chevronLeft */}
                     <View style={styles.upperBar}>
                         <TouchableOpacity style={styles.chevronLeft} onPress={() => { this.props.navigation.goBack() }}>
@@ -170,6 +237,9 @@ class RegisterPersonal extends React.Component {
 
 const mapStateToProps = state => {
     return {
+        accessToken: state.accessToken,
+        userId: state.userId,
+        userName: state.userName,
     };
 };
 
