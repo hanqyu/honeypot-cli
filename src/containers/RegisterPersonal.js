@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./styles/RegisterPersonal";
 import Toast, { DURATION } from 'react-native-easy-toast'
-import { Text, View, Modal, Image, Dimensions, TouchableOpacity, TouchableWithoutFeedback, TextInput, Keyboard, DatePickerIOS } from "react-native";
+import { Text, View, Modal, Image, Dimensions, TouchableOpacity, TouchableWithoutFeedback, TextInput, Keyboard, DatePickerIOS, ActivityIndicator } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { connect } from 'react-redux';
 import { setInputData } from '../store/actions/index'
@@ -44,12 +44,12 @@ class RegisterPersonal extends React.Component {
         this.setState({ isLoading: true });
 
         const body = this.parsingBody();
-        
+
         if (body === false) {
             this.props.navigation.navigate(NEXT_VIEW);
             return false;
         }
-        
+
         console.log(this.props.userId);
         const response = await fetch(apiBaseUrl + 'api/v1/auth/user/' + this.props.userId + '/', {
             method: 'PATCH',
@@ -77,8 +77,8 @@ class RegisterPersonal extends React.Component {
         } else if (this.state.inputData.gender.female) {
             body.gender = 'F'
         }
-        
-        const fourteenYear = 1000*60*60*24*365*14;
+
+        const fourteenYear = 1000 * 60 * 60 * 24 * 365 * 14;
         const today = new Date();
         if (today.getTime() - this.state.inputData.birthDate.getTime() >= fourteenYear) {
             body.birthDate = birthDate
@@ -224,6 +224,7 @@ class RegisterPersonal extends React.Component {
                     <TouchableOpacity
                         style={styles.buttonContainer}
                         onPress={() => this.handleForm()}>
+                        {this.state.isLoading && <ActivityIndicator size="small" color="#FFFFFF" />}
                         <Text style={styles.buttonText}>
                             다음
                         </Text>
