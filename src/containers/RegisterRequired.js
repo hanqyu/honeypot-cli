@@ -126,9 +126,15 @@ class RegisterRequired extends React.Component {
         }
     }
 
-    isNotEmpty(string) {
-        return (typeof string === 'string' && string.length) ? 1 : 0
+    objectIsNotEmpty(obj) {
+        if (Object.keys(obj).length === 0) {
+            return false;
+        }
+
+        isNotEmpty = string => (string.length > 0) ? 1 : 0
+        return Object.values(obj).map((val)=>isNotEmpty(val)).reduce((acc, val) => acc * val)
     }
+
 
     render() {
         return (
@@ -234,7 +240,7 @@ class RegisterRequired extends React.Component {
                                 {(this.state.inputValid.password === false) &&
                                     <Text style={styles.filedInputValidation}>
                                         비밀번호는 6자 이상, 문자 + 숫자를 포함해야 해요.
-                        </Text>}
+                            </Text>}
                             </View>
 
                             {/* password validation */}
@@ -255,13 +261,10 @@ class RegisterRequired extends React.Component {
                                     onChangeText={(passwordCheck) => this.setState({ inputData: { ...this.state.inputData, passwordCheck } })}
                                 />
                                 <View style={styles.fieldDivider} />
-                                {
-                                    (this.state.inputValid.passwordCheck === false) &&
+                                {(this.state.inputValid.passwordCheck === false) &&
                                     <Text style={styles.filedInputValidation}>
                                         비밀번호를 확인해주세요.
-                                    </Text>
-
-                                }
+                                    </Text>}
                             </View>
                         </InputScrollView>
                     </View>
@@ -269,8 +272,11 @@ class RegisterRequired extends React.Component {
 
                     {/* button */}
                     <TouchableOpacity
-                        style={styles.buttonContainer}
-                        onPress={() => this.handleForm()}>
+                        onPress={() => this.handleForm()}
+                        style={[
+                            styles.buttonContainer,
+                            { backgroundColor: this.objectIsNotEmpty(this.state.inputData) ? '#F5A623' : '#B9B9B9' }
+                        ]}>
                         {this.state.isLoading && <ActivityIndicator size="small" color="#FFFFFF" />}
                         <Text style={styles.buttonText}>
                             다음
@@ -285,13 +291,19 @@ class RegisterRequired extends React.Component {
 
 
 
+
 const mapStateToProps = state => {
     return {
         isLoading: false,
         accessToken: state.accessToken,
         userId: state.userId,
         userName: state.userName,
-        inputData: {},
+        inputData: {
+            email: "",
+            username: "",
+            password: "",
+            passwordCheck: ""
+        },
         inputValid: {},
     };
 };
