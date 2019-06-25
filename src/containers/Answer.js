@@ -4,7 +4,8 @@ import { Header } from 'react-navigation';
 import styles from "../containers/styles/Answer";
 import QuestionInAnswerCard from "../components/QuestionInAnswerCard.js";
 import AnswerList from "../components/AnswerList";
-
+import { connect } from 'react-redux';
+import { setLoading } from '../store/actions/index'
 
 const DismissKeyboard = ({ children }) => (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -12,51 +13,47 @@ const DismissKeyboard = ({ children }) => (
     </TouchableWithoutFeedback >
 );
 
-export default class Answer extends React.Component {
+class Answer extends React.Component {
     constructor(props) {
         super(props);
-        this.questionId = this.props.navigation.getParam('questionId');
         this.state = {
             ...props,
-            isLoading: true,
+            dataSource: []
         };
         this.fetchAnswer = this.fetchAnswer.bind(this);
-        this.state.bearer_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTYxMjg3NDQ4LCJqdGkiOiI5ZTdiMmI3NTRiMjg0OWZlYmVjMzM0MTc0Mjc2ZmYyYyIsInVzZXJfaWQiOjJ9.0wmunQASomn39C7-ZLmW80a2JxdRzmXvy5z5OxHUevU';
     }
 
-    async fetchAnswer(questionId) {
-        this.setState({
-            isLoading: true
-        })
-
-        await fetch('http://127.0.0.1:8000/api/v1/question/' + questionId + '/answer/', {
+    fetchAnswer(questionId) {
+        this.props.onSetLoading(true)
+        
+        fetch('http://127.0.0.1:8000/api/v1/question/' + questionId + '/answer/', {
             method: 'GET',
             headers: {
-                'Authorization': 'Bearer ' + this.state.bearer_token,
                 'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + this.props.accessToken,
             },
         }).then(response => {
-            if (response.status == 200) {
-                const responseJson = response.json();
-                return responseJson
+            if (response.ok) {
+                return response.json()
             }
         }).then(responseJson => {
             this.setState({
-                isLoading: false,
-                dataSource: responseJson,
+                dataSource: responseJson.result,
             })
+        }).then(() => {
+            this.props.onSetLoading(false)
         }).catch(error => {
             console.error(error);
             return { name: "network error", description: "" };
         });
     }
-
+    
     componentDidMount() {
-        this.fetchAnswer(this.questionId);
+        this.fetchAnswer(this.state.question.id);
     }
 
     render() {
-        if (this.state.isLoading) {
+        if (this.props.isLoading) {
             return (
                 <View style={{ flex: 1, alignSelf: 'center' }}>
                     <ActivityIndicator />
@@ -80,18 +77,18 @@ export default class Answer extends React.Component {
                                 <Image style={styles.userAvatar} source={require('../assets/images/default.jpg')} />
                             </View>
                         </View>
-                        
+
                         <QuestionInAnswerCard
-                            questionId={this.state.dataSource.question.id}
-                            questionText={this.state.dataSource.question.text}
-                            time={this.state.dataSource.question.created_at}
+                            questionId={this.state.question.id}
+                            questionText={this.state.question.text}
+                            time={this.state.question.time}
                         />
                         <AnswerList
-                            dataSource={this.state.dataSource.result}
+                            dataSource={this.state.dataSource}
                         />
 
                     </View>
-                    
+
                     <KeyboardAvoidingView
                         behavior="position"
                         keyboardVerticalOffset={Header.HEIGHT + 30}
@@ -122,3 +119,22 @@ export default class Answer extends React.Component {
         )
     }
 }
+
+
+const mapStateToProps = state => {
+    return {
+        isLoading: state.auth.isLoading,
+        accessToken: state.auth.accessToken,
+        userId: state.auth.userId,
+        userName: state.auth.userName,
+        question: state.answer.question
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onSetLoading: (bool) => dispatch(setLoading(bool)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Answer);

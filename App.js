@@ -23,7 +23,7 @@ const MainNavigator = createStackNavigator({
 },
 { 
     headerMode: 'none',
-    initialRouteName: 'Login',
+    initialRouteName: 'AuthLoading',
     navigationOptions: {
         headerVisible: false,
     },

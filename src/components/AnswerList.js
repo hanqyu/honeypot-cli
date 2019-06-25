@@ -9,6 +9,7 @@ export default class AnswerList extends React.Component {
 
     constructor(props) {
         super(props);
+        console.log(props)
         this.state = {
             ...props
         };

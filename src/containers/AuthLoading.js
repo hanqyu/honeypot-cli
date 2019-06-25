@@ -6,7 +6,7 @@ import {
     View,
 } from 'react-native';
 import { connect } from 'react-redux';
-import { setToken } from '../store/actions/index'
+import { setToken, setUserId, setUserName } from '../store/actions/index'
 import AsyncStorage from '@react-native-community/async-storage';
 
 
@@ -39,8 +39,9 @@ class AuthLoading extends React.Component {
         })
         if (response.ok) {
             this.props.onSetToken(accessToken);
-            AsyncStorage.setItem('accessToken', accessToken);
-            console.log(this.props)
+            // TODO: this.props.onSetUserId();
+            // 아직 verify token에서 userId를 내려주지 않음
+            AsyncStorage.setItem('accessToken: ', accessToken);
             this.props.navigation.navigate('Home');
         } else {
             this.refreshToken();
@@ -98,7 +99,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onSetToken: (accessToken) => dispatch(setToken(accessToken))
+        onSetToken: (accessToken) => dispatch(setToken(accessToken)),
+        onSetUserId: (userId) => dispatch(setUserId(userId)),
+		onSetUserName: (userName) => dispatch(setUserName(userName)),
     };
 };
 

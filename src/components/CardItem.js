@@ -3,6 +3,8 @@ import styles from "./styles/CardItem";
 
 import { Text, View, Image, Dimensions, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
+import { connect } from 'react-redux';
+import { setViewingQuetstion } from '../store/actions/index'
 
 const timeToKorean = (time) => {
 	var min = 60 * 1000;
@@ -33,7 +35,7 @@ const timeToKorean = (time) => {
 }
 const maxlimit = 127;
 
-export default class CardItem extends React.Component {
+class CardItem extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -42,7 +44,7 @@ export default class CardItem extends React.Component {
 		}
 		this.state.timeKor = timeToKorean(this.state.time);
 		this.state.selectedAnswerTextTruncated = '';
-		
+
 		if (this.state.hasSelectedAnswer && this.state.selectedAnswerText) {
 			this.state.questionTextTruncated = (this.state.questionText.length > maxlimit / 3) ? ((this.state.questionText.substring(0, maxlimit / 3 - 3)) + '...') : this.state.questionText
 			this.state.selectedAnswerTextTruncated = (this.state.selectedAnswerText.length > maxlimit / 3) ? ((this.state.selectedAnswerText.substring(0, maxlimit / 3 - 3)) + '...') : this.state.selectedAnswerText;
@@ -51,9 +53,12 @@ export default class CardItem extends React.Component {
 		}
 	}
 
-	render() {
-		const { navigate } = this.props.navigation;
+	handleButtonAnswer() {
+		this.props.onSetViewingQuestion({id: this.props.questionId, text: this.props.questionText, time: this.props.time})
+		this.props.navigation.navigate('Answer')
+	}
 
+	render() {
 		return (
 
 			<View style={styles.shadow}>
@@ -117,7 +122,7 @@ export default class CardItem extends React.Component {
 					{/* button */}
 					<View style={styles.buttonContainer}>
 						<TouchableOpacity
-							onPress={() => navigate('Answer', {questionId: this.state.questionId})}
+							onPress={() => this.handleButtonAnswer()}
 							style={styles.button}>
 							<Text style={styles.buttonText}>답변</Text>
 						</TouchableOpacity>
@@ -135,3 +140,21 @@ export default class CardItem extends React.Component {
 		);
 	}
 };
+
+
+const mapStateToProps = state => {
+	return {
+		isLoading: state.auth.isLoading,
+		accessToken: state.auth.accessToken,
+		userId: state.auth.userId,
+		userName: state.auth.userName,
+	};
+};
+
+const mapDispatchToProps = dispatch => {
+	return {
+		onSetViewingQuestion: (question) => dispatch(setViewingQuetstion(question))
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CardItem);

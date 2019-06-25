@@ -40,9 +40,9 @@ export default class QuestionInAnswerCard extends React.Component {
 		this.state = {
 			...props,
 		};
-		this.state.bearer_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTYxMjg3NDQ4LCJqdGkiOiI5ZTdiMmI3NTRiMjg0OWZlYmVjMzM0MTc0Mjc2ZmYyYyIsInVzZXJfaWQiOjJ9.0wmunQASomn39C7-ZLmW80a2JxdRzmXvy5z5OxHUevU';
-		this.state.timeKor = timeToKorean(this.state.time);
-		this.state.questionTextTruncated = (this.state.questionText.length > maxlimit) ? ((this.state.questionText.substring(0, maxlimit - 3)) + '...') : this.state.questionText;
+		// this.state.bearer_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTYxMjg3NDQ4LCJqdGkiOiI5ZTdiMmI3NTRiMjg0OWZlYmVjMzM0MTc0Mjc2ZmYyYyIsInVzZXJfaWQiOjJ9.0wmunQASomn39C7-ZLmW80a2JxdRzmXvy5z5OxHUevU';
+		this.state.timeKor = timeToKorean(props.time);
+		this.state.questionTextTruncated = (props.questionText.length > maxlimit) ? ((this.props.questionText.substring(0, maxlimit - 3)) + '...') : this.state.questionText;
 		this.postBoost = this.postBoost.bind(this);
 	}
 
@@ -51,7 +51,7 @@ export default class QuestionInAnswerCard extends React.Component {
 			{
 				method: 'POST',
 				headers: {
-					'Authorization': 'Bearer ' + this.state.bearer_token,
+					'Authorization': 'Bearer ' + this.props.accessToken,
 					'Content-Type': 'application/json',
 				},
 			}).then(response => {

@@ -238,9 +238,9 @@ class RegisterPersonal extends React.Component {
 
 const mapStateToProps = state => {
     return {
-        accessToken: state.accessToken,
-        userId: state.userId,
-        userName: state.userName,
+        accessToken: state.auth.accessToken,
+        userId: state.auth.userId,
+        userName: state.auth.userName,
     };
 };
 

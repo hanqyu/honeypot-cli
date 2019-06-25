@@ -6,27 +6,22 @@ import AsyncStorage from '@react-native-community/async-storage';
 import CardItem from "../components/CardItem";
 import styles from "../containers/styles/Home";
 import { connect } from 'react-redux';
-import { setToken, setUserId, setUserName, setLoading } from '../store/actions/index'
+import { setToken, setUserId, setUserName, setLoading, setViewingQuetstion } from '../store/actions/index'
 
 const filterButtons = [
 	{ id: 0, text: '최신순', urlParam: 'recent' },
 	{ id: 1, text: '인기순', urlParam: 'popular' },
-	{ id: 2, text: '관심사순', urlParam: 'bycategory' }
+	{ id: 2, text: '관심사순', urlParam: 'preferred' }
 ]
 
 const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'http://honeypot.hanqyu.com/'
 
 class Home extends React.Component {
 
-	constructor(props) {
-		console.log(props);
-		super(props);
-		this.state = {
-			isLoading: true,
-			selectedId: 1,
-			selectedUrlParam: 'recent',
-			dataSource: {}
-		}
+	state = {
+		selectedId: 1,
+		selectedUrlParam: 'popular',
+		dataSource: []
 	}
 
 	handleFilterChange = (id) => {
@@ -40,29 +35,29 @@ class Home extends React.Component {
 		this.fetchQuestion(this.state.selectedUrlParam);
 	}
 
-	async fetchQuestion(urlParam) {
-		this.setState({
-			isLoading: true,
-		})
-		console.log(this.props)
-		const response = await fetch(apiBaseUrl + 'api/v1/question/' + urlParam + '/', {
-			method: 'POST',
+	fetchQuestion(urlParam) {
+		this.props.onSetLoading(true)
+		fetch(apiBaseUrl + 'api/v1/question/' + urlParam + '/', {
+			method: 'GET',
 			headers: {
-				// 'Authorization': 'Bearer ' + this.props.accessToken,
-				'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTYyMDc4NjIyLCJqdGkiOiI0ZmJhOWQxMTI0ZTk0Mzc3OGQyMmI4YzlkMGZlZTBjMyIsInVzZXJfaWQiOjJ9.xbsb5ejv351U3angZqFhXIKqBKvOScXsWXwVBfq4pdY',
+				'Authorization': 'Bearer ' + this.props.accessToken,
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify({
-				count: 30
-			}),
-		});
-		
-		const responseJson = await response.json();
-		console.log(responseJson)
-		this.setState({
-			isLoading: false,
-			dataSource: responseJson.result,
-		});
+		}).then(response => {
+			if (response.ok) {
+				return response.json()
+			}
+		}).then(responseJson => {
+			this.setState({
+				dataSource: responseJson.result
+			})
+		}).then(() => {
+			this.props.onSetLoading(false)
+		}).catch(error => {
+            console.error(error);
+            return { name: "network error", description: "" };
+        });
+
 	}
 
 	componentDidMount() {
@@ -72,8 +67,6 @@ class Home extends React.Component {
 	boost = (id) => {
 		this.swiper.swipeLeft()
 		this.postBoost(id)
-		console.log(AsyncStorage.getItem('accessToken'))
-		this.refs.toast.show(AsyncStorage.getItem('accessToken'));
 	}
 
 	async postBoost(questionId) {
@@ -81,8 +74,8 @@ class Home extends React.Component {
 			{
 				method: 'POST',
 				headers: {
-					// 'Authorization': 'Bearer ' + this.props.accessToken,
-					'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTYyMDc4NjIyLCJqdGkiOiI0ZmJhOWQxMTI0ZTk0Mzc3OGQyMmI4YzlkMGZlZTBjMyIsInVzZXJfaWQiOjJ9.xbsb5ejv351U3angZqFhXIKqBKvOScXsWXwVBfq4pdY',
+					'Authorization': 'Bearer ' + this.props.accessToken,
+					// 'Authorization': 'Bearer ' + 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTYyMDc4NjIyLCJqdGkiOiI0ZmJhOWQxMTI0ZTk0Mzc3OGQyMmI4YzlkMGZlZTBjMyIsInVzZXJfaWQiOjJ9.xbsb5ejv351U3angZqFhXIKqBKvOScXsWXwVBfq4pdY',
 					'Content-Type': 'application/json',
 				},
 			}).then(response => {
@@ -92,17 +85,15 @@ class Home extends React.Component {
 					// TODO-토스트 or 부스트 된 이펙트
 				}
 			}).catch(error => {
-				console.error(error);
+				this.props.onSetLoading
 				return { name: "network error", description: "" };
 			});
 	}
 
-
-
 	render() {
 		const { navigate } = this.props.navigation;
 
-		if (this.state.isLoading) {
+		if (this.props.isLoading) {
 			return (
 				<View style={{ flex: 1, alignSelf: 'center' }}>
 					<ActivityIndicator size="small" />
@@ -185,10 +176,6 @@ class Home extends React.Component {
 	};
 };
 
-
-
-
-
 const mapStateToProps = state => {
 	return {
 		isLoading: state.auth.isLoading,
@@ -204,6 +191,7 @@ const mapDispatchToProps = dispatch => {
 		onSetToken: (accessToken) => dispatch(setToken(accessToken)),
 		onSetUserId: (userId) => dispatch(setUserId(userId)),
 		onSetUserName: (userName) => dispatch(setUserName(userName)),
+		onSetViewingQuestion: (question) => dispatch(setViewingQuetstion(question))
 	};
 };
 

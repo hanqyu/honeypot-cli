@@ -300,9 +300,9 @@ class RegisterRequired extends React.Component {
 const mapStateToProps = state => {
     return {
         isLoading: false,
-        accessToken: state.accessToken,
-        userId: state.userId,
-        userName: state.userName,
+        accessToken: state.auth.accessToken,
+        userId: state.auth.userId,
+        userName: state.auth.userName,
     };
 };
 
