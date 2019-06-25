@@ -6,6 +6,10 @@ import QuestionInAnswerCard from "../components/QuestionInAnswerCard.js";
 import AnswerList from "../components/AnswerList";
 import { connect } from 'react-redux';
 import { setLoading } from '../store/actions/index'
+import { ScrollView } from "react-native-gesture-handler";
+
+
+const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'https://honeypot.hanqyu.com/'
 
 const DismissKeyboard = ({ children }) => (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -25,8 +29,8 @@ class Answer extends React.Component {
 
     fetchAnswer(questionId) {
         this.props.onSetLoading(true)
-        
-        fetch('http://127.0.0.1:8000/api/v1/question/' + questionId + '/answer/', {
+
+        fetch(apiBaseUrl + questionId + '/answer/', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -47,7 +51,38 @@ class Answer extends React.Component {
             return { name: "network error", description: "" };
         });
     }
-    
+
+    handleSendButton() {
+        if (this.state.text) {
+            this.refs.keyboardAvoidingView.enabled = false;
+            this.postAnswer(this.state.question.id)
+        }
+    }
+
+    async postAnswer() {
+        await fetch(apiBaseUrl + 'api/v1/answer/',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + this.props.accessToken,
+                },
+                body: JSON.stringify({
+                    question: this.state.question.id,
+                    anonymous: false,
+                    text: this.state.text
+                })
+            }).then(response => {
+                if (response.ok) {
+                    this.fetchAnswer(this.state.question.id);
+                }
+            }).catch(error => {
+                this.props.onSetLoading
+                return { name: "network error", description: "" };
+            });
+    }
+
+
     componentDidMount() {
         this.fetchAnswer(this.state.question.id);
     }
@@ -87,12 +122,17 @@ class Answer extends React.Component {
                             dataSource={this.state.dataSource}
                         />
 
+
                     </View>
 
                     <KeyboardAvoidingView
+                        ref="keyboardAvoidingView"
                         behavior="position"
                         keyboardVerticalOffset={Header.HEIGHT + 30}
                         style={styles.answerTextInputKeyboardAvoidingView}>
+
+                        {/* <View style={styles.answerTextInputBackground}></View> */}
+
                         {/* answerTextInput */}
                         <View style={styles.answerTextInputContainer}>
                             <View style={styles.answerTextInputBox}>
@@ -111,11 +151,17 @@ class Answer extends React.Component {
                                     value={this.state.text}
                                 />
                             </View>
+                            {/* sendButton */}
+                            <TouchableOpacity
+                                style={styles.sendButton}
+                                onPress={() => this.handleSendButton()}>
+                                <Image style={styles.sendButtonImage}
+                                    source={require('../assets/icons/send.png')} />
+                            </TouchableOpacity>
                         </View>
                     </KeyboardAvoidingView>
-
                 </View>
-            </DismissKeyboard>
+            </DismissKeyboard >
         )
     }
 }

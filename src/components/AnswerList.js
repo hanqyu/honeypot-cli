@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./styles/AnswerList";
 
-import { Modal, Text, View, Image, Dimensions, TouchableOpacity, TextInput, ScrollView } from "react-native";
+import { Modal, Text, View, Image, ScrollView, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 
 
@@ -47,21 +47,21 @@ export default class AnswerList extends React.Component {
                             </TouchableOpacity>
                         </View>
                     </View>
+
                     {/* listContainer */}
                     <View style={styles.listContainer}>
                         {/* leftLineBar */}
                         {listIsNotEmpty && (<View style={styles.leftLineBar} />)}
-                        
+
                         {/* answerItemContainer */}
                         <View style={styles.answerItemContainer}>
-                            
                             {/* empty status text */}
                             {(listIsNotEmpty == false) && (
                                 <View style={styles.answerColumnContainer}>
                                     {/* answerRowContainer */}
                                     <View style={styles.answerRowContainer}>
                                         {/* leftLineBarCircle */}
-                                        <View style={[styles.leftLineBarCircle, {marginLeft: 0}]} />
+                                        <View style={[styles.leftLineBarCircle, { marginLeft: 0 }]} />
                                         {/* answerTextContainer */}
                                         <View style={styles.answerTextContainer}>
                                             <Text style={styles.answerText}>
@@ -71,7 +71,7 @@ export default class AnswerList extends React.Component {
                                     </View>
                                 </View>
                             )}
-                            
+
                             {this.state.dataSource.map((item, index) => (
                                 <View style={styles.answerColumnContainer}>
                                     {/* answerRowContainer */}

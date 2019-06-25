@@ -134,7 +134,6 @@ export default StyleSheet.create({
         backgroundColor: '#fcf53c80',
     },
     answerItemContainer:{
-
     },
     answerColumnContainer: {
         display: 'flex',
