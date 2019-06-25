@@ -63,8 +63,6 @@ class RegisterCategory extends React.Component {
         }
     }
 
-
-
     handleForm() {
         if (this.state.selectedCategory) {
             this.postForm()
@@ -74,7 +72,6 @@ class RegisterCategory extends React.Component {
 
     handleCategoryItem(categoryId) {
         newSelectedCategory = this.state.selectedCategory
-        console.log(this.state.selectedCategory)
         if (this.state.selectedCategory.includes(categoryId)) {
             const index = this.state.selectedCategory.indexOf(categoryId)
             if (index > -1 ) {
@@ -83,11 +80,9 @@ class RegisterCategory extends React.Component {
         } else {
             newSelectedCategory.push(categoryId)
         }
-        console.log(this.state.selectedCategory)
         this.setState({
             selectedCategory: newSelectedCategory
         })
-        console.log(this.state.selectedCategory)
     }
 
     render() {
@@ -124,7 +119,6 @@ class RegisterCategory extends React.Component {
                                     key={category.id}
                                 >
                                     <Text style={styles.categoryText}>
-                                        {console.log(category)}
                                         {category.name}
                                     </Text>
                                 </TouchableOpacity>
