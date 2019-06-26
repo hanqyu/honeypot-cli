@@ -30,7 +30,7 @@ class Answer extends React.Component {
     fetchAnswer(questionId) {
         this.props.onSetLoading(true)
 
-        fetch(apiBaseUrl + questionId + '/answer/', {
+        fetch(apiBaseUrl + 'api/v1/question/' + questionId + '/answer/', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
