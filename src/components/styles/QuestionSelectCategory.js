@@ -52,7 +52,14 @@ export default StyleSheet.create({
         marginBottom: 20,
 	},
 	categoryBoxSelected: {
-
+		backgroundColor: PRIMARY_COLOR,
+		borderRadius: 15,
+		paddingRight: 14,
+		paddingLeft: 14,
+		paddingTop: 9,
+		paddingBottom: 9,
+        marginRight: 10,
+        marginBottom: 20,
 	},
 	categoryText: {
 		fontFamily: CARD_FONT,
