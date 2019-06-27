@@ -24,15 +24,11 @@ class Home extends React.Component {
 		dataSource: []
 	}
 
-	handleFilterChange = (id) => {
-		this.setState({ selectedId: id });
-		const urlParam = filterButtons.find(obj => { return obj.id === this.state.selectedId }).urlParam;
-		this.setState({ selectedUrlParam: urlParam });
-	}
 
 	clickFilter = (id) => {
-		this.handleFilterChange(id);
-		this.fetchQuestion(this.state.selectedUrlParam);
+		const urlParam = filterButtons.find(obj => { return obj.id === id }).urlParam;
+		this.setState({ selectedId: id, selectedUrlParam: urlParam });
+		this.fetchQuestion(urlParam);
 	}
 
 	fetchQuestion(urlParam) {
@@ -60,14 +56,12 @@ class Home extends React.Component {
 	}
 
 	componentDidMount() {
-		this.fetchQuestion(this.state.selectedUrlParam);
 		this.willFocusSubscription = this.props.navigation.addListener(
 			'willFocus',
 			() => {
 				this.fetchQuestion(this.state.selectedUrlParam);
 			}
 		);
-
 	}
 
 	componentWillUnmount() {
@@ -75,7 +69,7 @@ class Home extends React.Component {
 	}
 
 	boost = (id) => {
-		this.swiper.swipeLeft()
+		// this.swiper.swipeLeft()
 		this.postBoost(id)
 	}
 
@@ -99,8 +93,6 @@ class Home extends React.Component {
 				return { name: "network error", description: "" };
 			});
 	}
-
-
 
 	render() {
 		const { navigate } = this.props.navigation;
@@ -171,6 +163,7 @@ class Home extends React.Component {
 								category={item.category_name}
 								answerCount={item.answer_count}
 								votingCount={item.voting_count}
+								alreadyVoted={item.requested_user_voted}
 								boost={() => this.boost(item.id)}
 								navigation={this.props.navigation}
 							/>
