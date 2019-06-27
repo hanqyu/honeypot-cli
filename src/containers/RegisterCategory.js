@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./styles/RegisterCategory";
-
+import Toast, { DURATION } from 'react-native-easy-toast'
 import { Text, View, Image, TouchableOpacity, ActivityIndicator } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { connect } from 'react-redux';
@@ -25,7 +25,7 @@ class RegisterCategory extends React.Component {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                // 'Authorization': 'Bearer ' + this.props.accessToken
+                'Authorization': 'Bearer ' + this.props.accessToken
             },
             timeout: 3000,
         });
@@ -43,7 +43,7 @@ class RegisterCategory extends React.Component {
 
     async postForm() {
         this.setState({ isLoading: true });
-        
+
         const response = await fetch(apiBaseUrl + 'api/v1/auth/user/' + this.props.userId + '/', {
             method: 'PATCH',
             headers: {
@@ -74,8 +74,9 @@ class RegisterCategory extends React.Component {
         newSelectedCategory = this.state.selectedCategory
         if (this.state.selectedCategory.includes(categoryId)) {
             const index = this.state.selectedCategory.indexOf(categoryId)
-            if (index > -1 ) {
-                newSelectedCategory.splice(index, 1)    
+            // array에서 제거
+            if (index > -1) {
+                newSelectedCategory.splice(index, 1)
             }
         } else {
             newSelectedCategory.push(categoryId)
@@ -88,6 +89,17 @@ class RegisterCategory extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                {/* toast */}
+                <Toast
+                    style={styles.toastError}
+                    position='top'
+                    positionValue={60}
+                    fadeInDuration={500}
+                    fadeOutDuration={500}
+                    opacity={0.7}
+                    textStyle={styles.toastErrorText}
+                    ref='toast' />
+
                 {/* chevronLeft */}
                 <View style={styles.upperBar}>
                     <TouchableOpacity style={styles.chevronLeft} onPress={() => { this.props.navigation.goBack() }}>
