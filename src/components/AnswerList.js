@@ -19,27 +19,7 @@ class AnswerList extends React.Component {
         };
     }
 
-    postSelectAnswer(answerId) {
-        this.props.onSetLoading(true)
-        fetch(apiBaseUrl + 'api/v1/answer/' + answerId + '/select/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + this.props.accessToken,
-            },
-        }).then(response => {
-            if (response.ok) {
-                return response.json()
-            } else {
-                return;
-            }
-        })
-        this.props.onSetLoading(false)
-    }
 
-    handleSelectAnswer() {
-        this.postSelectAnswer();
-    }
 
     render() {
         const listIsNotEmpty = (this.state.dataSource.length !== 0);
@@ -117,7 +97,7 @@ class AnswerList extends React.Component {
                                             <Text style={styles.selectedAnswer}>채택답변</Text>
                                             :
                                             (this.state.isMyQuestion) ? <TouchableOpacity
-                                                onPress={() => this.handleSelectAnswer(item.id)}
+                                                onPress={() => this.props.handleSelectAnswer(item.id)}
                                                 style={styles.selectAnswerButton}>
                                                 <Text style={styles.selectAnswerText}>채택하기</Text>
                                             </TouchableOpacity>

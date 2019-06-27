@@ -54,7 +54,7 @@ class CardItem extends React.Component {
 	}
 
 	handleButtonAnswer() {
-		this.props.onSetViewingQuestion({ id: this.props.questionId, text: this.props.questionText, time: this.props.time })
+		this.props.onSetViewingQuestion({ id: this.props.questionId, text: this.props.questionText, time: this.props.time, alreadyVoted: this.props.alreadyVoted })
 		this.props.navigation.navigate('Answer')
 	}
 

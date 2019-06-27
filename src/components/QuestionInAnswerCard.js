@@ -3,6 +3,8 @@ import styles from "./styles/QuestionInAnswerCard";
 
 import { Modal, Text, View, Image, Dimensions, TouchableOpacity, TextInput, ScrollView } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
+import { connect } from 'react-redux';
+
 
 const maxlimit = 24;
 const timeToKorean = (time) => {
@@ -35,16 +37,17 @@ const timeToKorean = (time) => {
 
 const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'http://honeypot.hanqyu.com/'
 
-export default class QuestionInAnswerCard extends React.Component {
+class QuestionInAnswerCard extends React.Component {
 
 	constructor(props) {
 		super(props);
+		console.log(props)
 		this.state = {
 			...props,
 		};
+		console.log(this.state)
 		this.state.timeKor = timeToKorean(props.time);
 		this.state.questionTextTruncated = (props.questionText.length > maxlimit) ? ((this.props.questionText.substring(0, maxlimit - 3)) + '...') : this.state.questionText;
-		this.postBoost = this.postBoost.bind(this);
 	}
 
 	async postBoost(questionId) {
@@ -56,11 +59,15 @@ export default class QuestionInAnswerCard extends React.Component {
 					'Content-Type': 'application/json',
 				},
 			}).then(response => {
-				if ((response.status == 200) || (response.status == 204)) {
+				if (response.ok) {
 					const responseJson = response.json();
 					return responseJson
 					// TODO-토스트 or 부스트 된 이펙트
+				} else {
+					return;
 				}
+			}).then(() => {
+				this.setState({ alreadyVoted: !this.state.alreadyVoted })
 			}).catch(error => {
 				console.error(error);
 				return { name: "network error", description: "" };
@@ -71,7 +78,6 @@ export default class QuestionInAnswerCard extends React.Component {
 		return (
 			<View style={styles.shadow}>
 				<LinearGradient colors={['#ff8500', '#ffec00']} style={styles.container}>
-
 					<View style={styles.contentsContainer}>
 						{/* textAndTimeContainer */}
 						<View style={styles.textAndTimeContainer}>
@@ -82,8 +88,8 @@ export default class QuestionInAnswerCard extends React.Component {
 						</View>
 
 						{/* <ScrollView style={{ flex: 1 }}> */}
-							{/* questionText */}
-							<Text style={styles.questionText}>{this.state.questionTextTruncated}</Text>
+						{/* questionText */}
+						<Text style={styles.questionText}>{this.state.questionTextTruncated}</Text>
 						{/* </ScrollView> */}
 					</View>
 
@@ -91,7 +97,12 @@ export default class QuestionInAnswerCard extends React.Component {
 						<TouchableOpacity
 							style={styles.button}
 							onPress={() => this.postBoost(this.state.questionId)}>
-							<Text style={styles.buttonText}>부스트</Text>
+							{
+								(this.state.alreadyVoted) ?
+									<Text style={[styles.buttonText, { color: '#ced4da' }]}>부스트</Text>
+									:
+									<Text style={styles.buttonText}>부스트</Text>
+							}
 						</TouchableOpacity>
 					</View>
 				</LinearGradient>
@@ -99,3 +110,21 @@ export default class QuestionInAnswerCard extends React.Component {
 		);
 	};
 };
+
+
+
+const mapStateToProps = state => {
+	return {
+		isLoading: state.auth.isLoading,
+		accessToken: state.auth.accessToken,
+		userId: state.auth.userId,
+		userName: state.auth.userName,
+	};
+};
+
+const mapDispatchToProps = dispatch => {
+	return {
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(QuestionInAnswerCard);

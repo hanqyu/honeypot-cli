@@ -4,6 +4,7 @@ import { ActivityIndicator, View, Text, TouchableOpacity, Image, Keyboard, Touch
 import QuestionCard from "../components/QuestionCard";
 import styles from "./styles/Question";
 
+
 const DismissKeyboard = ({ children }) => (
 	<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 		{children}
@@ -21,7 +22,7 @@ export default class Question extends React.Component {
 			this.refs.toastError.show(textMessage, TOAST_DURATION);
 		}
 		if (type == 'General') {
-			this.refs.toastGeneral.show(textMessage, TOAST_DURATION);
+			this.refs.toastGeneral.show(textMessage, TOAST_DURATION)
 		}
 	}
 

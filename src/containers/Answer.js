@@ -1,5 +1,5 @@
 import React from "react";
-import { ActivityIndicator, View, Text, TouchableOpacity, TouchableWithoutFeedback, Image, Keyboard, TextInput, KeyboardAvoidingView } from "react-native";
+import { ActivityIndicator, View, Text, Alert, TouchableOpacity, TouchableWithoutFeedback, Image, Keyboard, TextInput, KeyboardAvoidingView } from "react-native";
 import { Header } from 'react-navigation';
 import Toast, { DURATION } from 'react-native-easy-toast'
 import styles from "../containers/styles/Answer";
@@ -25,8 +25,10 @@ const DismissKeyboard = ({ children }) => (
 class Answer extends React.Component {
     constructor(props) {
         super(props);
+        console.log(props)
         this.state = {
             ...props,
+            isLoading: true,
             isMyQuestion: '',
             hasSelectedAnswer: '',
             dataSource: []
@@ -49,13 +51,16 @@ class Answer extends React.Component {
             }
         }).then(responseJson => {
             console.log(responseJson)
+            console.l
             this.setState({
-                isMyQuestion: (responseJson.question.user_id == this.props.userId),
+                alreadyVoted: responseJson.question.requested_user_voted,
+                isMyQuestion: responseJson.question.is_my_question,
                 hasSelectedAnswer: responseJson.question.has_selected_answer,
                 dataSource: responseJson.result,
+                isLoading: false
             })
         }).then(() => {
-            this.setState({ isLoading: false })
+
         }).catch(error => {
             console.error(error);
             return { name: "network error", description: "" };
@@ -65,7 +70,6 @@ class Answer extends React.Component {
 
     handleSendButton() {
         if (this.state.text) {
-            this.refs.keyboardAvoidingView.enabled = false;
             this.postAnswer(this.state.question.id)
         }
     }
@@ -103,6 +107,38 @@ class Answer extends React.Component {
 
     setScrollHeight = (width, height) => this.setState({ scrollHeight: height });
 
+    postSelectAnswer(answerId) {
+        this.setState({ isLoading: true })
+
+        fetch(apiBaseUrl + 'api/v1/answer/' + answerId + '/select/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + this.props.accessToken,
+            },
+        }).then(response => {
+            if (response.ok) {
+                return response.json()
+            } else {
+                return;
+            }
+        }).then(() => {
+            this.fetchAnswer(this.state.question.id);
+        })
+
+        this.setState({ isLoading: false })
+    }
+
+    handleSelectAnswer(answerId) {
+        Alert.alert(
+            '답변 채택하기',
+            '이 답변을 채택할까요? 취소할 수 없어요',
+            [
+                { 'text': '취소', onPress: () => { return false } },
+                { 'text': '채택', onPress: () => { this.postSelectAnswer(answerId); } }
+            ]
+        )
+    }
     render() {
         if (this.state.isLoading) {
             return (
@@ -185,6 +221,7 @@ class Answer extends React.Component {
                             <TouchableWithoutFeedback>
                                 <View>
                                     <QuestionInAnswerCard
+                                        alreadyVoted={this.state.question.alreadyVoted}
                                         questionId={this.state.question.id}
                                         questionText={this.state.question.text}
                                         time={this.state.question.time}
@@ -193,6 +230,7 @@ class Answer extends React.Component {
                                         isMyQuestion={this.state.isMyQuestion}
                                         hasSelectedAnswer={this.state.hasSelectedAnswer}
                                         dataSource={this.state.dataSource}
+                                        handleSelectAnswer={(answerId) => this.handleSelectAnswer(answerId)}
                                     />
                                 </View>
                             </TouchableWithoutFeedback>
