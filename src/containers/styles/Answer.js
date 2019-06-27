@@ -22,7 +22,17 @@ export default StyleSheet.create({
 		backgroundColor: WHITE,
 		width: DIMENSION_WIDTH,
 	},
+	toastError: {
+        backgroundColor: 'red',
+        borderRadius: 10,
+    },
+    toastErrorText: {
+        fontFamily: CARD_FONT_BARUN,
+        fontSize: 12,
+        color: WHITE
+    },
 	upperBar: {
+		display: 'flex',
 		marginLeft: 15,
 		marginRight: 15,
 		alignItems: "center",
@@ -47,7 +57,9 @@ export default StyleSheet.create({
 		justifyContent: 'center',
 	},
 	scrollView: {
-		height: DIMENSION_HEIGHT - 400
+		// height: DIMENSION_HEIGHT * 10,
+		// display: 'flex',
+		alignItems: 'center'
 	},
 	answerTextInputKeyboardAvoidingView: {
 		flex: 1,
@@ -56,11 +68,12 @@ export default StyleSheet.create({
 		justifyContent: 'center',
 		// bottom: 0,
 		// zIndex: 1,
-		// position: 'position'
+		// position: 'absoulte'
 	},
 	answerTextInputBackground: {
 		display: 'flex',
 		alignSelf: 'center',
+		justifyContent: 'flex-start',
 		width: DIMENSION_WIDTH,
 		backgroundColor: WHITE,
 	},
@@ -69,7 +82,7 @@ export default StyleSheet.create({
 		backgroundColor: WHITE,
 		zIndex: 1,
 		height: 60,
-		marginTop: 34,
+		marginBottom: 34,
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'center',

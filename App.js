@@ -21,25 +21,25 @@ const MainNavigator = createStackNavigator({
     RegisterCategory: { screen: RegisterCategory },
     Login: { screen: Login },
 },
-{ 
-    headerMode: 'none',
-    initialRouteName: 'AuthLoading',
-    navigationOptions: {
-        headerVisible: false,
-    },
-    transitionConfig: () => ({
-        screenInterpolator: (sceneProps) => {
-          if (
-            sceneProps.index === 1 &&
-            sceneProps.scene.route.routeName !== 'AuthLoading'
-          ) return null
-    
-          return CardStackStyleInterpolator.forHorizontal(sceneProps)
+    {
+        headerMode: 'none',
+        initialRouteName: 'AuthLoading',
+        navigationOptions: {
+            headerVisible: false,
         },
-    })
-     
+        transitionConfig: () => ({
+            screenInterpolator: (sceneProps) => {
+                if (
+                    sceneProps.index === 1 &&
+                    sceneProps.scene.route.routeName !== 'AuthLoading'
+                ) return null
+                    
+                return CardStackStyleInterpolator.forHorizontal(sceneProps)
+            },
+        })
 
-});
+
+    });
 
 const AppContainer = createAppContainer(MainNavigator);
 
@@ -51,4 +51,4 @@ export default class App extends React.Component {
     }
 }
 
-  
+

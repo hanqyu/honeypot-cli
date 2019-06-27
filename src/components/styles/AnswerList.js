@@ -26,7 +26,7 @@ export default StyleSheet.create({
         marginTop: 35,
         marginLeft: 15,
         marginRight: 15,
-        height: CARD_HEIGHT,
+        // height: CARD_HEIGHT,
         width: CARD_WIDTH,
         backgroundColor: WHITE,
         shadowOpacity: 0.19,
@@ -37,7 +37,7 @@ export default StyleSheet.create({
     contentsContainer: {
         paddingLeft: 20,
         paddingRight: 20,
-        height: CARD_HEIGHT - BUTTON_HEIGHT,
+        // height: CARD_HEIGHT - BUTTON_HEIGHT,
     },
 
     // upperBar
@@ -133,21 +133,24 @@ export default StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#fcf53c80',
     },
-    answerItemContainer:{
-    },
     answerColumnContainer: {
         display: 'flex',
-        alignItems: 'flex-start',
-        justifyContent: 'flex-start',
+        // alignItems: 'flex-start',
+        // justifyContent: 'flex-start',
         width: CARD_WIDTH - 29,
-        marginBottom: 15
+        marginBottom: 15,
+        // borderColor: 'red',
+        // borderWidth: 1,
     },
     answerRowContainer: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
-        width: CARD_WIDTH - 29,
+        width: CARD_WIDTH - 29 - 20,
+        marginRight: 20,
+        // borderColor: 'red',
+        // borderWidth: 1,
     },
     leftLineBarCircle: {
         display: 'flex',
@@ -157,39 +160,28 @@ export default StyleSheet.create({
         borderRadius: 5,
         marginLeft: -10,
     },
-    answerTextContainer: {
-        display: 'flex',
-        marginLeft: 24
-    },
-    answerLabelContainer: {
+    answerRow: {
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center',
+        marginLeft: 22,
+        marginBottom: 75,
+        marginRight: 20,
+        // borderColor: 'red',
+        // borderWidth: 1
     },
-    labelA: {
+    answerUserImage: {
         display: 'flex',
-        color: BLACK,
-        fontSize: 20,
-        fontFamily: CARD_FONT,
-        fontWeight: '400',
-        letterSpacing: 0.4,
+        alignSelf: 'flex-start',
+        width: 28,
+        height: 28,
+        borderRadius: 14,
+        borderColor: WHITE,
+        borderWidth: 1.2,
+        marginRight: 20,
     },
-    selectedAnswerBox: {
-        display: 'flex',
-        paddingTop: 2,
-        paddingLeft: 8,
-        paddingRight: 7,
-        paddingBottom: 1,
-        borderRadius: 15,
-        textAlign: 'center',
-        marginLeft: 5
-    },
-    selectedAnswerText: {
-        color: WHITE,
-        fontSize: 10,
-        fontFamily: CARD_FONT,
-        fontWeight: '500',
-        letterSpacing: 0.8,
+    noAnswerView: {
+        marginLeft: 23,
+        marginBottom: 151,
     },
     answerText: {
         display: 'flex',
@@ -199,65 +191,30 @@ export default StyleSheet.create({
         fontWeight: '400',
         letterSpacing: 0.4,
     },
-    answerItemImage: {
+    selectedAnswer:{
+        bottom: 30,
         display: 'flex',
         alignSelf: 'flex-end',
-        marginTop: 6,
-        width: 28,
-        height: 28,
-        borderRadius: 14,
-        borderColor: WHITE,
-        borderWidth: 1.2,
+        marginRight: 20,
+        color: PRIMARY_COLOR,
+        fontSize: 13,
+        fontFamily: CARD_FONT_BARUN,
+        fontWeight: '700',
+        letterSpacing: 0.26,
+    },
+    selectAnswerButton: {
+        bottom: 30,
+        display: 'flex',
+        alignSelf: 'flex-end',
         marginRight: 20,
     },
-    bottomGradient: {
-        zIndex: 1,
-        height: 52,
-        bottom: 52 + BUTTON_HEIGHT,
+    selectAnswerText: {
+        display: 'flex',
+        color: PRIMARY_COLOR,
+        fontSize: 13,
+        fontFamily: CARD_FONT_BARUN,
+        fontWeight: '700',
+        letterSpacing: 0.26,
     },
-
-    // button
-    buttonContainer: {
-        backgroundColor: WHITE,
-        display: "flex",
-        alignSelf: "flex-end",
-        flexDirection: 'row',
-        justifyContent: 'center',
-        height: BUTTON_HEIGHT,
-        overflow: 'hidden',
-        borderRadius: 15
-    },
-    button: {
-        backgroundColor: WHITE,
-        textAlign: 'center',
-        width: CARD_WIDTH,
-        display: "flex",
-        margin: 0,
-        padding: 0,
-        justifyContent: 'center',
-        height: BUTTON_HEIGHT,
-    },
-    buttonImage: {
-        alignSelf: 'center',
-    },
-
-    // deprecated
-    categoryBox: {
-        backgroundColor: "#FFFFFFC0",
-        borderRadius: 15,
-        paddingRight: 31,
-        paddingLeft: 31,
-        paddingTop: 9,
-        paddingBottom: 8,
-        marginTop: 18,
-    },
-    categoryText: {
-        fontFamily: CARD_FONT,
-        fontWeight: '900',
-        color: ORANGE,
-        fontSize: 12,
-        textAlign: 'center'
-    },
-
-
+    
 });

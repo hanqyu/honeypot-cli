@@ -24,7 +24,7 @@ export default StyleSheet.create({
 	container: {
 		borderRadius: 15,
 		alignItems: "center",
-		marginTop: 68,
+		marginTop: 68/2,
 		marginLeft: 15,
 		marginRight: 15,
 		height: CARD_HEIGHT,

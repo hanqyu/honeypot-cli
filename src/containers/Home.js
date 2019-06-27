@@ -13,7 +13,7 @@ const filterButtons = [
 	{ id: 1, text: '인기순', urlParam: 'popular' },
 	{ id: 2, text: '관심사순', urlParam: 'preferred' }
 ]
-
+const TOAST_DURATION = 2000
 const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'http://honeypot.hanqyu.com/'
 
 class Home extends React.Component {
@@ -51,6 +51,7 @@ class Home extends React.Component {
 			this.props.onSetLoading(false)
 		}).catch(error => {
 			console.error(error);
+			this.props.onSetLoading(false)
 			return { name: "network error", description: "" };
 		});
 	}
@@ -69,7 +70,6 @@ class Home extends React.Component {
 	}
 
 	boost = (id) => {
-		// this.swiper.swipeLeft()
 		this.postBoost(id)
 	}
 
@@ -89,7 +89,6 @@ class Home extends React.Component {
 					// TODO-토스트 or 부스트 된 이펙트
 				}
 			}).catch(error => {
-				this.props.onSetLoading
 				return { name: "network error", description: "" };
 			});
 	}

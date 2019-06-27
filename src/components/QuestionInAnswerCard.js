@@ -33,6 +33,8 @@ const timeToKorean = (time) => {
 	return result.formatted;
 }
 
+const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'http://honeypot.hanqyu.com/'
+
 export default class QuestionInAnswerCard extends React.Component {
 
 	constructor(props) {
@@ -40,14 +42,13 @@ export default class QuestionInAnswerCard extends React.Component {
 		this.state = {
 			...props,
 		};
-		// this.state.bearer_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTYxMjg3NDQ4LCJqdGkiOiI5ZTdiMmI3NTRiMjg0OWZlYmVjMzM0MTc0Mjc2ZmYyYyIsInVzZXJfaWQiOjJ9.0wmunQASomn39C7-ZLmW80a2JxdRzmXvy5z5OxHUevU';
 		this.state.timeKor = timeToKorean(props.time);
 		this.state.questionTextTruncated = (props.questionText.length > maxlimit) ? ((this.props.questionText.substring(0, maxlimit - 3)) + '...') : this.state.questionText;
 		this.postBoost = this.postBoost.bind(this);
 	}
 
 	async postBoost(questionId) {
-		await fetch('http://127.0.0.1:8000/api/v1/question/' + questionId + '/vote/',
+		await fetch(apiBaseUrl + 'api/v1/question/' + questionId + '/vote/',
 			{
 				method: 'POST',
 				headers: {
@@ -80,10 +81,10 @@ export default class QuestionInAnswerCard extends React.Component {
 							<Text style={styles.timeText}>{this.state.timeKor}</Text>
 						</View>
 
-						<ScrollView style={{ flex: 1 }}>
+						{/* <ScrollView style={{ flex: 1 }}> */}
 							{/* questionText */}
 							<Text style={styles.questionText}>{this.state.questionTextTruncated}</Text>
-						</ScrollView>
+						{/* </ScrollView> */}
 					</View>
 
 					<View style={styles.buttonContainer}>
