@@ -54,14 +54,24 @@ class Home extends React.Component {
 		}).then(() => {
 			this.props.onSetLoading(false)
 		}).catch(error => {
-            console.error(error);
-            return { name: "network error", description: "" };
-        });
-
+			console.error(error);
+			return { name: "network error", description: "" };
+		});
 	}
 
 	componentDidMount() {
 		this.fetchQuestion(this.state.selectedUrlParam);
+		this.willFocusSubscription = this.props.navigation.addListener(
+			'willFocus',
+			() => {
+				this.fetchQuestion(this.state.selectedUrlParam);
+			}
+		);
+
+	}
+
+	componentWillUnmount() {
+		this.willFocusSubscription.remove();
 	}
 
 	boost = (id) => {
@@ -89,6 +99,8 @@ class Home extends React.Component {
 				return { name: "network error", description: "" };
 			});
 	}
+
+
 
 	render() {
 		const { navigate } = this.props.navigation;
