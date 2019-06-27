@@ -23,6 +23,15 @@ export default StyleSheet.create({
         width: DIMENSION_WIDTH,
         height: DIMENSION_HEIGHT,
     },
+    toastError: {
+        backgroundColor: 'red',
+        borderRadius: 10,
+    },
+    toastErrorText: {
+        fontFamily: CARD_FONT_BARUN,
+        fontSize: 12,
+        color: WHITE
+    },
     upperBar: {
 		marginLeft: 15,
         marginRight: 15,
