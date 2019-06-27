@@ -54,8 +54,33 @@ class CardItem extends React.Component {
 	}
 
 	handleButtonAnswer() {
-		this.props.onSetViewingQuestion({id: this.props.questionId, text: this.props.questionText, time: this.props.time})
+		this.props.onSetViewingQuestion({ id: this.props.questionId, text: this.props.questionText, time: this.props.time })
 		this.props.navigation.navigate('Answer')
+	}
+
+	handleVotingCount(type) {
+		if (type == 'minus') {
+			this.setState({ 
+				votingCount: this.state.votingCount - 1, 
+				alreadyVoted: !this.state.alreadyVoted
+			})
+		} else if (type == 'plus') {
+			this.setState({ 
+				votingCount: this.state.votingCount + 1, 
+				alreadyVoted: !this.state.alreadyVoted 
+			})
+		}
+
+	}
+
+	handleBoost() {
+		if (this.state.alreadyVoted) {
+			this.handleVotingCount('minus')
+		} else {
+			this.handleVotingCount('plus')
+		}
+
+		this.props.boost()
 	}
 
 	render() {
@@ -126,12 +151,20 @@ class CardItem extends React.Component {
 							style={styles.button}>
 							<Text style={styles.buttonText}>답변</Text>
 						</TouchableOpacity>
+
 						<View style={styles.buttonDivider}></View>
+
 						<TouchableOpacity
-							onPress={() => this.props.boost()}
+							onPress={() => this.handleBoost()}
 							style={styles.button}>
-							<Text style={styles.buttonText}>부스트</Text>
+							{
+								(this.state.alreadyVoted) ?
+									<Text style={[styles.buttonText, { color: '#ced4da' }]}>부스트</Text>
+									:
+									<Text style={styles.buttonText}>부스트</Text>
+							}
 						</TouchableOpacity>
+
 					</View>
 
 				</LinearGradient>
