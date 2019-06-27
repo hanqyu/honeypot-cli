@@ -1,4 +1,5 @@
 import React from "react";
+import Toast, { DURATION } from 'react-native-easy-toast'
 import { ActivityIndicator, View, Text, TouchableOpacity, Image, Keyboard, TouchableWithoutFeedback } from "react-native";
 import QuestionCard from "../components/QuestionCard";
 import styles from "./styles/Question";
@@ -8,36 +9,52 @@ const DismissKeyboard = ({ children }) => (
 		{children}
 	</TouchableWithoutFeedback>
 );
+const TOAST_DURATION = 2000
 
 export default class Question extends React.Component {
-
 	constructor(props) {
 		super(props);
-		// this.state.bearer_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNTYxMjg3NDQ4LCJqdGkiOiI5ZTdiMmI3NTRiMjg0OWZlYmVjMzM0MTc0Mjc2ZmYyYyIsInVzZXJfaWQiOjJ9.0wmunQASomn39C7-ZLmW80a2JxdRzmXvy5z5OxHUevU';
 	}
 
-	// handler() {
-	// 	this.setState({
-	// 		style=styles.filterButtonOnClickCardItem
-	// 	})
-	// }
-
-	// _pop(){
-	// 	this.props.navigation.pop({
-	// 	  animated: true, // does the pop have transition animation or does it happen immediately (optional)
-	// 	  animationType: 'fade', // 'fade' (for both) / 'slide-horizontal' (for android) does the pop have different transition animation (optional)
-	// 	});
-	//   }
+	handleToast(textMessage, type) {
+		if (type == 'Error') {
+			this.refs.toastError.show(textMessage, TOAST_DURATION);
+		}
+		if (type == 'General') {
+			this.refs.toastGeneral.show(textMessage, TOAST_DURATION);
+		}
+	}
 
 	render() {
 
 		return (
 			<DismissKeyboard>
 				<View style={styles.containerHome}>
+					{/* toastError */}
+					<Toast
+						style={styles.toastError}
+						position='top'
+						positionValue={60}
+						fadeInDuration={500}
+						fadeOutDuration={500}
+						opacity={0.7}
+						textStyle={styles.toastErrorText}
+						ref='toastError' />
+
+					{/* toastGeneral */}
+					<Toast
+						style={styles.toastGeneral}
+						position='top'
+						positionValue={60}
+						fadeInDuration={500}
+						fadeOutDuration={500}
+						opacity={0.7}
+						textStyle={styles.toastGeneralText}
+						ref='toastGeneral' />
 
 					<View style={styles.upperBar}>
 						{/* chevronLeft */}
-						<TouchableOpacity style={styles.chevronLeft} onPress={()=>{this.props.navigation.goBack()}}>
+						<TouchableOpacity style={styles.chevronLeft} onPress={() => { this.props.navigation.goBack() }}>
 							<Image source={require('../assets/icons/chevronLeft.png')} />
 						</TouchableOpacity>
 
@@ -47,7 +64,10 @@ export default class Question extends React.Component {
 						</View>
 					</View>
 
-					<QuestionCard />
+					<QuestionCard
+						navigateBack={() => this.props.navigation.goBack()}
+						handleToast={(textMessage, type) => this.handleToast(textMessage, type)}
+					/>
 
 				</View>
 			</DismissKeyboard>

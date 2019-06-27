@@ -23,6 +23,24 @@ export default StyleSheet.create({
 		backgroundColor: WHITE,
 		width: DIMENSION_WIDTH,
 	},
+	toastError: {
+		backgroundColor: 'red',
+		borderRadius: 10,
+	},
+	toastErrorText: {
+		fontFamily: CARD_FONT_BARUN,
+		fontSize: 12,
+		color: WHITE
+	},
+	toastGeneral: {
+		backgroundColor: BLACK,
+		borderRadius: 10,
+	},
+	toastGeneralText: {
+		fontFamily: CARD_FONT_BARUN,
+		fontSize: 12,
+		color: WHITE
+	},
 	upperBar: {
 		marginLeft: 15,
 		marginRight: 15,
@@ -127,7 +145,7 @@ export default StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: 'space-between',
 		marginTop: 32,
-	}, 
+	},
 	questionTextCardItem: {
 		color: WHITE,
 		fontSize: 25,
@@ -263,7 +281,7 @@ export default StyleSheet.create({
 		alignSelf: 'center',
 		textAlign: "center",
 	},
-	
+
 	status: {
 		paddingBottom: 10,
 		flexDirection: "row",

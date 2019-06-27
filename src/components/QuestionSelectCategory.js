@@ -4,14 +4,15 @@ import styles from "./styles/QuestionSelectCategory";
 import { ActivityIndicator, Text, View, Image, Dimensions, TouchableOpacity } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { connect } from 'react-redux';
-import { setToken, setUserId, setUserName, setLoading, setViewingQuetstion } from '../store/actions/index'
+import { setToken, setUserId, setUserName, setLoading, setSelectedCategory, setSelectedCategoryName } from '../store/actions/index'
 
 const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'https://honeypot.hanqyu.com/'
 
 class QuestionSelectCategory extends React.Component {
     state = {
-        selectedCategory: NaN,
-        dataSource: []
+        selectedCategory: this.props.selectedCategory,
+        dataSource: [],
+        buttonDisabled: true,
     }
 
     componentDidMount() {
@@ -43,8 +44,9 @@ class QuestionSelectCategory extends React.Component {
         });
     }
 
-    handleCategoryItem(categoryId) {
-        console.log(categoryId)
+    handleCategoryItem(categoryId, categoryName) {
+        this.props.onSetSelectedCategory(categoryId);
+        this.props.onSetSelectedCategoryName(categoryName);
         this.setState({ selectedCategory: categoryId })
     }
 
@@ -70,7 +72,7 @@ class QuestionSelectCategory extends React.Component {
                     {this.state.dataSource.map((category) => (
                         <TouchableOpacity
                             style={this.state.selectedCategory == category.id ? styles.categoryBoxSelected : styles.categoryBox}
-                            onPress={() => this.handleCategoryItem(category.id)}
+                            onPress={() => this.handleCategoryItem(category.id, category.name)}
                             key={category.id}
                         >
                             <Text style={styles.categoryText}>
@@ -81,7 +83,9 @@ class QuestionSelectCategory extends React.Component {
                     }
 
                 </View>
-                <TouchableOpacity style={styles.button}>
+                <TouchableOpacity
+                    onPress={() => this.state.selectedCategory ? this.props.closeDisplay() : null}
+                    style={this.state.selectedCategory ? styles.button : [styles.button, { backgroundColor: '#868e96' }]}>
                     <Text style={styles.buttonText}>선택하기</Text>
                 </TouchableOpacity>
             </View>
@@ -95,7 +99,8 @@ const mapStateToProps = state => {
         accessToken: state.auth.accessToken,
         userId: state.auth.userId,
         userName: state.auth.userName,
-        selectedCategory: state.question.selectedCategory
+        selectedCategory: state.selectedCategory,
+        selectedCategoryName: state.selectedCategoryName
     };
 };
 
@@ -103,6 +108,7 @@ const mapDispatchToProps = dispatch => {
     return {
         onSetLoading: (bool) => dispatch(setLoading(bool)),
         onSetSelectedCategory: (selectedCategory) => dispatch(setSelectedCategory(selectedCategory)),
+        onSetSelectedCategoryName: (selectedCategoryName) => dispatch(setSelectedCategoryName(selectedCategoryName))
     };
 };
 
