@@ -6,7 +6,6 @@ import QuestionSelectCategory from "./QuestionSelectCategory";
 
 
 class QuestionCard extends React.Component {
-	// const questionTextTruncated = (questionText.length > maxlimit) ? ((questionText.substring(0,maxlimit-3)) + '...') : questionText
 	state = {
 		modalVisible: false,
 	};
@@ -44,6 +43,7 @@ class QuestionCard extends React.Component {
 
 						<TextInput
 							placeholder="질문을 입력해주세요."
+							style={[styles.textArea, { height: 228 }]}
 							multiline={true}
 							onChangeText={(text) => {
 								this.setState({ text })
@@ -51,7 +51,6 @@ class QuestionCard extends React.Component {
 							onContentSizeChange={(event) => {
 								this.setState({ height: event.nativeEvent.contentSize.height })
 							}}
-							style={[styles.textArea, { height: Math.max(228, this.state.height) }]}
 							value={this.state.text}
 						/>
 					</View>
@@ -77,7 +76,6 @@ class QuestionCard extends React.Component {
 						</TouchableOpacity>
 					</View>
 				</LinearGradient>
-
 			</View>
 
 		);
