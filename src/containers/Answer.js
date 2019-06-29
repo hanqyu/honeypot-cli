@@ -13,7 +13,7 @@ import StickyHeaderFooterScrollView from 'react-native-sticky-header-footer-scro
 
 
 
-const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'https://honeypot.hanqyu.com/'
+const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'http://honeypot.hanqyu.com/'
 const TOAST_DURATION = 2000
 
 const DismissKeyboard = ({ children }) => (
@@ -134,8 +134,10 @@ class Answer extends React.Component {
             '답변 채택하기',
             '이 답변을 채택할까요? 취소할 수 없어요',
             [
-                { 'text': '취소', onPress: () => { return false } },
-                { 'text': '채택', onPress: () => { this.postSelectAnswer(answerId); } }
+                { 'text': '취소', 
+                onPress: () => { return false } },
+                { 'text': '채택', 
+                onPress: () => { this.postSelectAnswer(answerId); } }
             ]
         )
     }

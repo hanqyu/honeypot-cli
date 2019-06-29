@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { setToken, setUserId, setUserName, setLoading, setViewingQuetstion } from '../store/actions/index'
 
 const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'http://honeypot.hanqyu.com/'
+// const apiBaseUrl = 'http://honeypot.hanqyu.com/'
 
 class AnswerList extends React.Component {
 
@@ -66,7 +67,7 @@ class AnswerList extends React.Component {
                                         <View style={[styles.leftLineBarCircle, { marginLeft: 0 }]} />
                                         {/* noAnswerView */}
                                         <View style={styles.noAnswerView}>
-                                            <Text style={styles.answerText}>
+                                            <Text style={styles.noAnswerText}>
                                                 아직 답변이 없는 질문이에요
                                         </Text>
                                         </View>

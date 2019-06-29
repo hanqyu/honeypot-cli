@@ -10,7 +10,7 @@ import { setToken, setUserId, setUserName } from '../store/actions/index'
 import AsyncStorage from '@react-native-community/async-storage';
 
 
-const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'https://honeypot.hanqyu.com/'
+const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'http://honeypot.hanqyu.com/'
 
 class AuthLoading extends React.Component {
 

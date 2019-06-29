@@ -6,7 +6,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { connect } from 'react-redux';
 import { setToken, setUserId, setUserName, setLoading, setSelectedCategory, setSelectedCategoryName } from '../store/actions/index'
 
-const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'https://honeypot.hanqyu.com/'
+const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'http://honeypot.hanqyu.com/'
 
 class QuestionSelectCategory extends React.Component {
     state = {

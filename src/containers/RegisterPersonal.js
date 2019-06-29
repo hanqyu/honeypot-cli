@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { setInputData } from '../store/actions/index'
 
 const NEXT_VIEW = 'RegisterCategory';
-const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'https://honeypot.hanqyu.com/'
+const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'http://honeypot.hanqyu.com/'
 
 
 const DismissKeyboard = ({ children }) => (

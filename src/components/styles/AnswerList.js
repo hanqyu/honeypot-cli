@@ -149,6 +149,7 @@ export default StyleSheet.create({
         justifyContent: 'flex-start',
         width: CARD_WIDTH - 29 - 20,
         marginRight: 20,
+        paddingRight: 20
         // borderColor: 'red',
         // borderWidth: 1,
     },
@@ -166,6 +167,7 @@ export default StyleSheet.create({
         marginLeft: 22,
         marginBottom: 75,
         marginRight: 20,
+        paddingRight: 20
         // borderColor: 'red',
         // borderWidth: 1
     },
@@ -177,11 +179,19 @@ export default StyleSheet.create({
         borderRadius: 14,
         borderColor: WHITE,
         borderWidth: 1.2,
-        marginRight: 20,
+        marginRight: 10,
     },
     noAnswerView: {
         marginLeft: 23,
         marginBottom: 151,
+    },
+    noAnswerText: {
+        display: 'flex',
+        color: BLACK,
+        fontSize: 20,
+        fontFamily: CARD_FONT,
+        fontWeight: '400',
+        letterSpacing: 0.4,
     },
     answerText: {
         display: 'flex',
@@ -190,6 +200,7 @@ export default StyleSheet.create({
         fontFamily: CARD_FONT,
         fontWeight: '400',
         letterSpacing: 0.4,
+        marginRight: 20
     },
     selectedAnswer:{
         bottom: 30,

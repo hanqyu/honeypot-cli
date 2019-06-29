@@ -19,7 +19,7 @@ const regexs = {
     password: /(?=.*\d)(?=.*[a-zA-Z]).{6,}/,
 }
 
-const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'https://honeypot.hanqyu.com/'
+const apiBaseUrl = 'http://honeypot.hanqyu.com/'
 const NEXT_VIEW = 'RegisterPersonal';
 
 

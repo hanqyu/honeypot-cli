@@ -1,12 +1,11 @@
 import React from "react";
-import { ActivityIndicator, View, Text, TouchableOpacity, Image } from "react-native";
+import { ActivityIndicator, View, Text, TouchableOpacity, Image, Alert } from "react-native";
 import CardStack, { Card } from "react-native-card-stack-swiper";
 import Toast, { DURATION } from 'react-native-easy-toast'
-import AsyncStorage from '@react-native-community/async-storage';
 import CardItem from "../components/CardItem";
 import styles from "../containers/styles/Home";
 import { connect } from 'react-redux';
-import { setToken, setUserId, setUserName, setLoading, setViewingQuetstion } from '../store/actions/index'
+import { setToken, removeToken, setUserId, setUserName, setLoading, setViewingQuetstion } from '../store/actions/index'
 
 const filterButtons = [
 	{ id: 0, text: '최신순', urlParam: 'recent' },
@@ -15,7 +14,7 @@ const filterButtons = [
 ]
 const TOAST_DURATION = 2000
 const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'http://honeypot.hanqyu.com/'
-
+console.disableYellowBox = true;
 class Home extends React.Component {
 
 	state = {
@@ -93,6 +92,25 @@ class Home extends React.Component {
 			});
 	}
 
+	handleLogout() {
+		Alert.alert(
+			'로그아웃',
+			'로그아웃해서 뭐하시려고요?',
+			[
+				{ 'text': '취소', onPress: () => { return false } },
+				{
+					'text': '로그아웃', 
+					style: 'destructive',
+					onPress: () => {
+						this.props.removeToken()
+						this.props.navigation.navigate('Login')
+					}
+				}
+			]
+		)
+
+	}
+
 	render() {
 		const { navigate } = this.props.navigation;
 
@@ -117,7 +135,11 @@ class Home extends React.Component {
 					ref='toast' />
 				<View style={styles.upperBar}>
 					{/* userAvatar */}
-					<Image style={styles.userAvatar} source={require('../assets/images/default.jpg')} />
+					<TouchableOpacity
+						onPress={() => this.handleLogout()}>
+						<Image style={styles.userAvatar} source={require('../assets/images/default.jpg')} />
+					</TouchableOpacity>
+
 				</View>
 
 				{/* cardFilter */}
@@ -145,8 +167,9 @@ class Home extends React.Component {
 				</View>
 
 				<CardStack
+					style={{zIndex: 1}}
 					loop={true}
-					verticalSwipe={false}
+					verticalSwipe={true}
 					renderNoMoreCards={() => null}
 					ref={swiper => (this.swiper = swiper)}
 				>
@@ -192,6 +215,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 	return {
 		onSetLoading: (bool) => dispatch(setLoading(bool)),
+		removeToken: () => dispatch(removeToken()),
 		onSetToken: (accessToken) => dispatch(setToken(accessToken)),
 		onSetUserId: (userId) => dispatch(setUserId(userId)),
 		onSetUserName: (userName) => dispatch(setUserName(userName)),

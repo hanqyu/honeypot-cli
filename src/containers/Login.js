@@ -7,7 +7,7 @@ import styles from "../containers/styles/Login";
 import { connect } from 'react-redux';
 import { setToken, setUserId, setUserName, setLoading } from '../store/actions/index'
 
-const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'https://honeypot.hanqyu.com/'
+const apiBaseUrl = __DEV__ ? 'http://127.0.0.1:8000/' : 'http://honeypot.hanqyu.com/'
 const NEXT_VIEW = 'Home';
 
 const DismissKeyboard = ({ children }) => (
